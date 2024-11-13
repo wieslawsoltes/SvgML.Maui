@@ -62,6 +62,7 @@ public abstract partial class element
         Invalidate();
     }
     */
+
     protected override void OnPropertyChanged(string propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
