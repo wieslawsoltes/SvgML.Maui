@@ -45,11 +45,10 @@ public partial class svg
 
     static svg()
     {
+        Initialize();
+
         // TODO:
         // ClipToBoundsProperty.OverrideDefaultValue(typeof(svg), true);
-
-        s_skiaModel = new SkiaModel(new SKSvgSettings());
-        s_assetLoader = new SkiaAssetLoader(s_skiaModel);
 
         // TODO:
         // AffectsRender<svg>(StretchProperty, StretchDirectionProperty);
