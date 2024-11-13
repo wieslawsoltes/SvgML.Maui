@@ -17,6 +17,9 @@ public static class MauiProgram
         GC.KeepAlive(typeof(rect));
         GC.KeepAlive(typeof(circle));
 
+        
+        
+        GC.KeepAlive(typeof(Canvas));
 		
 		var builder = MauiApp.CreateBuilder();
 		builder
