@@ -10,39 +10,6 @@ namespace SvgML;
 /// </summary>
 public partial class svg
 {
-    protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
-    {
-        base.OnPaintSurface(e);
-        
-        var canvas = e.Surface.Canvas;
-        
-        // TODO:
-        // canvas.DrawColor(SKColors.Aqua);
-
-        var source = this;
-        
-        var css = GetCss(this);
-        var currentCss = GetCurrentCss(this);
-        var parameters = new SvgParameters(null, string.Concat(css, ' ', currentCss));
-        Load(source, parameters);
-
-        var _svg = this;
-        
-        lock (_svg.Sync)
-        {
-            var picture = _svg.Picture;
-            if (picture is null)
-            {
-                return;
-            }
-
-            canvas.Save();
-            canvas.DrawPicture(picture);
-            canvas.Restore();
-        }
-
-    }
-
     static svg()
     {
         Initialize();
@@ -71,6 +38,67 @@ public partial class svg
     }
     */
 
+    public svg()
+    {
+        Loaded += OnLoaded;
+        PaintSurface += OnPaintSurface;
+    }
+
+    private void OnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
+    {
+        Render(e);
+    }
+
+    private void OnLoaded(object? sender, EventArgs e)
+    {
+        InvalidateMeasure();
+        InvalidateSurface();
+    }
+
+    protected override void OnPropertyChanged(string propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+        
+        Invalidate();
+    }
+
+    protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
+    {
+        base.OnPaintSurface(e);
+
+        Render(e);
+    }
+
+    private void Render(SKPaintSurfaceEventArgs e)
+    {
+        var canvas = e.Surface.Canvas;
+        
+        // TODO:
+        // canvas.DrawColor(SKColors.Aqua);
+
+        var source = this;
+        
+        var css = GetCss(this);
+        var currentCss = GetCurrentCss(this);
+        var parameters = new SvgParameters(null, string.Concat(css, ' ', currentCss));
+        Load(source, parameters);
+
+        var _svg = this;
+        
+        lock (_svg.Sync)
+        {
+            var picture = _svg.Picture;
+            if (picture is null)
+            {
+                return;
+            }
+
+            canvas.Save();
+            canvas.DrawPicture(picture);
+            canvas.Restore();
+        }
+    }
+
     // TODO:
     /*
     protected override Size MeasureOverride(Size availableSize)
@@ -87,9 +115,17 @@ public partial class svg
         return Stretch.CalculateSize(availableSize, sourceSize, StretchDirection);
     }
     */
+    ///*
     protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
     {
-        return base.MeasureOverride(widthConstraint, heightConstraint);
+        //return base.MeasureOverride(widthConstraint, heightConstraint);
+        return new Size(200, 100);
+    }
+    /*/
+    
+    protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
+    {
+        return new SizeRequest(new Size(200.0, 100.0));
     }
 
     // TODO:
@@ -108,11 +144,14 @@ public partial class svg
         return Stretch.CalculateSize(finalSize, sourceSize);
     }
     */
+    /*
     protected override Size ArrangeOverride(Rect bounds)
     {
-        return base.ArrangeOverride(bounds);
+        //return base.ArrangeOverride(bounds);
+        
+        return new Size(200, 100);
     }
-
+*/
     /*
     public override void Render(DrawingContext context)
     {
@@ -167,7 +206,11 @@ public partial class svg
         {
             // TODO:
             // OnSourceChanged(this);
+            InvalidateMeasure();
+            InvalidateSurface();
         }
+        
+        
     }
 
     // TODO:
