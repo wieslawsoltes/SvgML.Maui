@@ -3,7 +3,67 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MyMauiApp.MainPage">
 
-  <svg viewBox="0 0 200 100" >
+  <VerticalStackLayout Padding="30,0" Spacing="25">
+
+    <svg viewBox="0 0 200 100">
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="0" y2="100%">
+          <stop offset="0%" style="stop-color:skyblue;" />
+          <stop offset="100%" style="stop-color:seagreen;" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" />
+      <circle cx="50" cy="50" r="40" fill="{Binding Source={x:Reference CircleFill}, Path=Text, Mode=TwoWay}" />
+      <circle cx="150" cy="50" r="40" fill="black" opacity="0.3" />
+    </svg>
+
+    <Entry x:Name="CircleFill" Text="red" />
+
+  </VerticalStackLayout>
+
+  
+  
+  
+  
+  
+  
+  <!--
+  <Canvas WidthRequest="400" 
+          HeightRequest="400" 
+          Background="LightGray">
+    <Label Text="Name" 
+           WidthRequest="100" HeightRequest="32"
+           Canvas.Left="50"
+           Canvas.Top="50" />
+    <Entry Text="Wiesław" 
+           WidthRequest="100" HeightRequest="32"
+           Canvas.Left="50"
+           Canvas.Top="82" />
+  </Canvas>
+  -->
+
+  <!--
+  <VerticalStackLayout Padding="30,0" Spacing="25">
+
+    <svg viewBox="0 0 200 100">
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="0" y2="100%">
+          <stop offset="0%" style="stop-color:skyblue;" />
+          <stop offset="100%" style="stop-color:seagreen;" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" />
+      <circle cx="50" cy="50" r="40" fill="{Binding Source={x:Reference CircleFill}, Path=Text, Mode=TwoWay}" />
+      <circle cx="150" cy="50" r="40" fill="black" opacity="0.3" />
+    </svg>
+
+    <Entry x:Name="CircleFill" Text="red" />
+
+  </VerticalStackLayout>
+  -->
+
+  <!--
+  <svg viewBox="0 0 200 100">
     <defs>
       <linearGradient id="gradient" x1="0%" y1="0%" x2="0" y2="100%">
         <stop offset="0%" style="stop-color:skyblue;" />
@@ -14,8 +74,27 @@
     <circle cx="50" cy="50" r="40" fill="black" />
     <circle cx="150" cy="50" r="40" fill="black" opacity="0.3" />
   </svg>
+  -->
+  
+  <!--
+  <VerticalStackLayout Padding="30,0" Spacing="25">
 
+    <svg viewBox="0 0 200 100">
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="0" y2="100%">
+          <stop offset="0%" style="stop-color:skyblue;" />
+          <stop offset="100%" style="stop-color:seagreen;" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" />
+      <circle cx="50" cy="50" r="40" fill="{Binding Source={x:Reference CircleFill}, Path=Text, Mode=TwoWay}" />
+      <circle cx="150" cy="50" r="40" fill="black" opacity="0.3" />
+    </svg>
 
+    <Entry x:Name="CircleFill" Text="red" />
+
+  </VerticalStackLayout>
+  -->
 
     <!-- xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls" -->
     
