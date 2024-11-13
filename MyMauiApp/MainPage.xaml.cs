@@ -13,6 +13,7 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
 	/*
 	private void OnTouch(object sender, SKTouchEventArgs e)
 	{
