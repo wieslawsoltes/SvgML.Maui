@@ -53,16 +53,6 @@ public abstract partial class element
         Invalidate();
     }
 
-    // TODO:
-    /*
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-
-        Invalidate();
-    }
-    */
-
     protected override void OnPropertyChanged(string propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
