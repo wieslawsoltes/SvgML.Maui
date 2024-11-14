@@ -17,11 +17,11 @@ public partial class svg
 
     // TODO: inherits = true
     public static readonly BindableProperty CssProperty = 
-        BindableProperty.CreateAttached("Css", typeof(string), typeof(svg), null);
+        BindableProperty.CreateAttached("Css", typeof(string), typeof(svg), null, propertyChanged: OnCssPropertyAttachedPropertyChanged);
 
     // TODO: inherits = true
     public static readonly BindableProperty CurrentCssProperty = 
-        BindableProperty.CreateAttached("CurrentCss", typeof(string), typeof(svg), null);
+        BindableProperty.CreateAttached("CurrentCss", typeof(string), typeof(svg), null, propertyChanged: OnCssPropertyAttachedPropertyChanged);
 
     public Stretch Stretch
     {
