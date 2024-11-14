@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Microsoft.Maui.Controls;
+using SkiaSharp;
 using SkiaSharp.Views.Maui;
 
 namespace MyMauiApp;
