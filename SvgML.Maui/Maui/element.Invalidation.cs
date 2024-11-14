@@ -12,9 +12,9 @@ public abstract partial class element
                 // TODO:
                 // LogicalChildren.InsertRange(e.NewStartingIndex, e.NewItems!.OfType<Control>().ToList());
                 // VisualChildren.InsertRange(e.NewStartingIndex, e.NewItems!.OfType<Visual>());
+
                 foreach (var element in e.NewItems!.OfType<Element>().ToList())
                 {
-                    
                     AddLogicalChild(element);
                 }
                 break;
@@ -23,12 +23,14 @@ public abstract partial class element
                 // TODO:
                 // LogicalChildren.MoveRange(e.OldStartingIndex, e.OldItems!.Count, e.NewStartingIndex);
                 // VisualChildren.MoveRange(e.OldStartingIndex, e.OldItems!.Count, e.NewStartingIndex);
+
                 break;
 
             case NotifyCollectionChangedAction.Remove:
                 // TODO:
                 // LogicalChildren.RemoveAll(e.OldItems!.OfType<Control>().ToList());
                 // VisualChildren.RemoveAll(e.OldItems!.OfType<Visual>());
+                
                 foreach (var element in e.NewItems!.OfType<Element>().ToList())
                 {
                     RemoveLogicalChild(element);
@@ -37,13 +39,15 @@ public abstract partial class element
 
             case NotifyCollectionChangedAction.Replace:
                 // TODO:
-                // for (var i = 0; i < e.OldItems!.Count; ++i)
-                // {
-                //     var index = i + e.OldStartingIndex;
-                //     var child = (Control)e.NewItems![i]!;
-                //     LogicalChildren[index] = child;
-                //     VisualChildren[index] = child;
-                // }
+                for (var i = 0; i < e.OldItems!.Count; ++i)
+                {
+                    var index = i + e.OldStartingIndex;
+                    var child = (Element)e.NewItems![i]!;
+                    // InsertLogicalChild(index, child);
+
+                    // LogicalChildren[index] = child;
+                    // VisualChildren[index] = child;
+                }
                 break;
 
             case NotifyCollectionChangedAction.Reset:
