@@ -13,6 +13,7 @@ public static class MauiProgram
 	{
 		
 		// TODO: Add UseSvgML() extension method to MauiAppBuilder
+        // TODO: Add all types from SvgML.Maui into UseSvgML() extension method
 		GC.KeepAlive(typeof(svg));
         GC.KeepAlive(typeof(defs));
         GC.KeepAlive(typeof(linearGradient));
@@ -20,8 +21,6 @@ public static class MauiProgram
         GC.KeepAlive(typeof(rect));
         GC.KeepAlive(typeof(circle));
 
-        
-        
         GC.KeepAlive(typeof(Canvas));
 		
 		var builder = MauiApp.CreateBuilder();
