@@ -16,27 +16,7 @@ public partial class svg
 
         // TODO:
         // ClipToBoundsProperty.OverrideDefaultValue(typeof(svg), true);
-
-        // TODO:
-        // AffectsRender<svg>(StretchProperty, StretchDirectionProperty);
-        // AffectsMeasure<svg>(StretchProperty, StretchDirectionProperty);
-
-        // TODO:
-        // CssProperty.Changed.AddClassHandler<Control>(OnCssPropertyAttachedPropertyChanged);
-        // CurrentCssProperty.Changed.AddClassHandler<Control>(OnCssPropertyAttachedPropertyChanged);
     }
-
-    // TODO:
-    /*
-    private static void OnCssPropertyAttachedPropertyChanged(AvaloniaObject d, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (d is Control control)
-        {
-            control.InvalidateMeasure();
-            control.InvalidateVisual();
-        }
-    }
-    */
 
     public svg()
     {
@@ -44,24 +24,60 @@ public partial class svg
         PaintSurface += OnPaintSurface;
     }
 
+    private static void OnCssPropertyAttachedPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (bindable is svg svg)
+        {
+            svg.InvalidateMeasure();
+            svg.InvalidateSurface();
+        }
+    }
+
+    // TODO:
+    //*
+    protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
+    {
+        // return base.MeasureOverride(widthConstraint, heightConstraint);
+        if (_picture == null)
+        {
+            return new Size();
+        }
+
+        var sourceSize = _picture is { }
+            ? new Size(_picture.CullRect.Width, _picture.CullRect.Height)
+            : default;
+
+        // return Stretch.CalculateSize(availableSize, sourceSize, StretchDirection);
+        return sourceSize;
+    }
+    //*/
+
+    // TODO:
+    /*
+    protected override Size ArrangeOverride(Rect bounds)
+    {
+        // return base.ArrangeOverride(bounds);
+
+        if (_picture == null)
+        {
+            return new Size();
+        }
+
+        var sourceSize = _picture is { }
+            ? new Size(_picture.CullRect.Width, _picture.CullRect.Height)
+            : default;
+
+        // TODO:
+        // return Stretch.CalculateSize(finalSize, sourceSize);
+        return sourceSize;
+    }
+    //*/
+
     private void OnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
     {
         Render(e);
     }
-
-    private void OnLoaded(object? sender, EventArgs e)
-    {
-        InvalidateMeasure();
-        InvalidateSurface();
-    }
-
-    protected override void OnPropertyChanged(string propertyName = null)
-    {
-        base.OnPropertyChanged(propertyName);
-        
-        Invalidate();
-    }
-
+    
     protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
     {
         base.OnPaintSurface(e);
@@ -69,25 +85,11 @@ public partial class svg
         Render(e);
     }
 
-    private void Render(SKPaintSurfaceEventArgs e)
+    private void Render(SKCanvas canvas)
     {
-        var canvas = e.Surface.Canvas;
-        
-        // TODO:
-        // canvas.DrawColor(SKColors.Aqua);
-
-        var source = this;
-        
-        var css = GetCss(this);
-        var currentCss = GetCurrentCss(this);
-        var parameters = new SvgParameters(null, string.Concat(css, ' ', currentCss));
-        Load(source, parameters);
-
-        var _svg = this;
-        
-        lock (_svg.Sync)
+        lock (Sync)
         {
-            var picture = _svg.Picture;
+            var picture = Picture;
             if (picture is null)
             {
                 return;
@@ -96,62 +98,24 @@ public partial class svg
             canvas.Save();
             canvas.DrawPicture(picture);
             canvas.Restore();
+        } 
+    }
+
+    private void Render(SKPaintSurfaceEventArgs e)
+    {
+        var source = _picture;
+        if (source is null)
+        {
+            return;
         }
+
+        // TODO: Copy code from Avalonia version: public override void Render(DrawingContext context)
+
+        // TODO: SKPictureCustomDrawOperation
+        Render(e.Surface.Canvas);
     }
 
     // TODO:
-    /*
-    protected override Size MeasureOverride(Size availableSize)
-    {
-        if (_picture == null)
-        {
-            return new Size();
-        }
-
-        var sourceSize = _picture is { }
-            ? new Size(_picture.CullRect.Width, _picture.CullRect.Height)
-            : default;
-
-        return Stretch.CalculateSize(availableSize, sourceSize, StretchDirection);
-    }
-    */
-    ///*
-    protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
-    {
-        //return base.MeasureOverride(widthConstraint, heightConstraint);
-        return new Size(200, 100);
-    }
-    /*/
-    
-    protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
-    {
-        return new SizeRequest(new Size(200.0, 100.0));
-    }
-
-    // TODO:
-    /*
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        if (_picture == null)
-        {
-            return new Size();
-        }
-
-        var sourceSize = _picture is { }
-            ? new Size(_picture.CullRect.Width, _picture.CullRect.Height)
-            : default;
-
-        return Stretch.CalculateSize(finalSize, sourceSize);
-    }
-    */
-    /*
-    protected override Size ArrangeOverride(Rect bounds)
-    {
-        //return base.ArrangeOverride(bounds);
-        
-        return new Size(200, 100);
-    }
-*/
     /*
     public override void Render(DrawingContext context)
     {
@@ -204,50 +168,41 @@ public partial class svg
 
         if (IsLoaded)
         {
-            // TODO:
-            // OnSourceChanged(this);
+            OnSourceChanged(this);
+        }
+    }
+
+    protected override void OnPropertyChanged(string propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+        
+        if (propertyName == "Css")
+        {
+            OnCssChanged(GetCss(this));
+        }
+
+        if (propertyName == "CurrentCss")
+        {
+            OnCurrentCssChanged(GetCurrentCss(this));
+        }
+
+        if (propertyName == "ClipToBounds")
+        {
+            InvalidateSurface();
+        }
+
+        if (propertyName == "Stretch" || propertyName == "StretchDirection")
+        {
             InvalidateMeasure();
             InvalidateSurface();
         }
-        
-        
     }
 
-    // TODO:
-    /*
-    /// <inheritdoc/>
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    private void OnLoaded(object? sender, EventArgs e)
     {
-        base.OnPropertyChanged(change);
-
-        if (change.Property == CssProperty)
-        {
-            var css = change.GetNewValue<string?>();
-            OnCssChanged(css);
-        }
-
-        if (change.Property == CurrentCssProperty)
-        {
-            var currentCss = change.GetNewValue<string?>();
-            OnCurrentCssChanged(currentCss);
-        }
-
-        if (change.Property == ClipToBoundsProperty)
-        {
-            InvalidateVisual();
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-
         OnSourceChanged(this);
     }
-    */
 
-    // TODO:
-    /*
     private void OnCssChanged(string? css)
     {
         var source = this;
@@ -255,7 +210,7 @@ public partial class svg
         var parameters = new SvgParameters(null, string.Concat(css, ' ', currentCss));
         Load(source, parameters);
         InvalidateMeasure();
-        InvalidateVisual();
+        InvalidateSurface();
     }
 
     private void OnCurrentCssChanged(string? currentCss)
@@ -265,7 +220,7 @@ public partial class svg
         var parameters = new SvgParameters(null, string.Concat(css, ' ', currentCss));
         Load(source, parameters);
         InvalidateMeasure();
-        InvalidateVisual();
+        InvalidateSurface();
     }
 
     private void OnSourceChanged(svg? source)
@@ -275,8 +230,6 @@ public partial class svg
         var parameters = new SvgParameters(null, string.Concat(css, ' ', currentCss));
         Load(source, parameters);
         InvalidateMeasure();
-        InvalidateVisual();
+        InvalidateSurface();
     }
-    */
-
 }
